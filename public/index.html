@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudBlitz Job Board - Find Your Dream Job</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-cloud"></i>
+                    <span>CloudBlitz</span>
+                    <span class="logo-text">Job Board</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#jobs" class="nav-link">Jobs</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="/admin" class="nav-link admin-link">Admin</a>
+                </div>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Find Your Dream Job at
+                    <span class="gradient-text">CloudBlitz</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Discover exciting opportunities in cloud computing, technology, and innovation. 
+                    Join our team and build the future with us.
+                </p>
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search jobs, skills, or companies...">
+                        <button id="searchBtn" class="search-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalJobs">0</span>
+                        <span class="stat-label">Active Jobs</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCompanies">0</span>
+                        <span class="stat-label">Companies</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalViews">0</span>
+                        <span class="stat-label">Job Views</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Fast Growing</h3>
+                    <p>Join our rapidly expanding team</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters">
+        <div class="container">
+            <div class="filters-content">
+                <div class="filter-group">
+                    <label for="locationFilter">Location</label>
+                    <select id="locationFilter">
+                        <option value="">All Locations</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter">Job Type</label>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="experienceFilter">Experience</label>
+                    <select id="experienceFilter">
+                        <option value="">All Levels</option>
+                        <option value="Entry Level">Entry Level</option>
+                        <option value="Mid Level">Mid Level</option>
+                        <option value="Senior Level">Senior Level</option>
+                        <option value="Executive">Executive</option>
+                    </select>
+                </div>
+                <button id="clearFilters" class="clear-filters-btn">
+                    <i class="fas fa-times"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jobs Section -->
+    <section id="jobs" class="jobs">
+        <div class="container">
+            <div class="section-header">
+                <h2>Latest Job Openings</h2>
+                <p>Find the perfect opportunity that matches your skills and aspirations</p>
+            </div>
+            
+            <div class="jobs-container">
+                <div id="jobsList" class="jobs-grid">
+                    <!-- Jobs will be loaded here -->
+                </div>
+                
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Loading jobs...</p>
+                </div>
+                
+                <div id="noJobsMessage" class="no-jobs" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>No jobs found</h3>
+                    <p>Try adjusting your search criteria or check back later for new opportunities.</p>
+                </div>
+            </div>
+            
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Details Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="job-details">
+                    <div class="job-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-building"></i>
+                            <span id="modalCompany"></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="modalLocation"></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="modalType"></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span id="modalSalary"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="job-description">
+                        <h3>Job Description</h3>
+                        <p id="modalDescription"></p>
+                    </div>
+                    
+                    <div class="job-requirements">
+                        <h3>Requirements</h3>
+                        <ul id="modalRequirements"></ul>
+                    </div>
+                    
+                    <div class="job-benefits" id="modalBenefitsSection" style="display: none;">
+                        <h3>Benefits</h3>
+                        <ul id="modalBenefits"></ul>
+                    </div>
+                    
+                    <div class="job-actions">
+                        <a id="applyBtn" href="#" target="_blank" class="apply-btn">
+                            <i class="fas fa-external-link-alt"></i>
+                            Apply Now
+                        </a>
+                        <button class="share-btn" onclick="shareJob()">
+                            <i class="fas fa-share"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About CloudBlitz</h2>
+                    <p>
+                        CloudBlitz is a leading technology company specializing in cloud computing solutions, 
+                        digital transformation, and innovative software development. We're passionate about 
+                        creating cutting-edge solutions that help businesses thrive in the digital age.
+                    </p>
+                    <p>
+                        Our team consists of talented professionals who are dedicated to excellence, 
+                        continuous learning, and pushing the boundaries of what's possible in technology.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-users"></i>
+                            <h3>Great Team</h3>
+                            <p>Work with talented and passionate professionals</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Learning</h3>
+                            <p>Continuous learning and growth opportunities</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <h3>Benefits</h3>
+                            <p>Comprehensive benefits and work-life balance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Get in Touch</h2>
+                    <p>Have questions about our job openings? We'd love to hear from you.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>careers@cloudblitz.in</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>+91 98765 43210</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Address</h4>
+                                <p>Mumbai, Maharashtra, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-cloud"></i>
+                        <span>CloudBlitz</span>
+                    </div>
+                    <p>Building the future of cloud computing and technology innovation.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#jobs">Jobs</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Career Guide</a></li>
+                        <li><a href="#">Interview Tips</a></li>
+                        <li><a href="#">Company Culture</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CloudBlitz. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudBlitz Job Board - Admin Panel</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="loginSection" class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fas fa-cloud"></i>
+                    <span>CloudBlitz</span>
+                </div>
+                <h1>Admin Login</h1>
+                <p>Sign in to manage job vacancies</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <a href="/" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Job Board
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="dashboard-section" style="display: none;">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <i class="fas fa-cloud"></i>
+                        <span>CloudBlitz</span>
+                        <span class="logo-text">Admin</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="admin-info">
+                        <span id="adminName">Admin</span>
+                        <div class="admin-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#overview" class="nav-item active" data-section="overview">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Overview</span>
+                    </a>
+                    <a href="#vacancies" class="nav-item" data-section="vacancies">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Vacancies</span>
+                    </a>
+                    <a href="#add-vacancy" class="nav-item" data-section="add-vacancy">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Vacancy</span>
+                    </a>
+                    <a href="#profile" class="nav-item" data-section="profile">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <div class="section-header">
+                        <h1>Dashboard Overview</h1>
+                        <p>Welcome back! Here's what's happening with your job board.</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalVacancies">0</h3>
+                                <p>Total Vacancies</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalViews">0</h3>
+                                <p>Total Views</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="activeVacancies">0</h3>
+                                <p>Active Jobs</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="expiredVacancies">0</h3>
+                                <p>Expired Jobs</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-vacancies">
+                        <h2>Recent Vacancies</h2>
+                        <div id="recentVacanciesList" class="recent-list">
+                            <!-- Recent vacancies will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vacancies Section -->
+                <section id="vacancies" class="content-section">
+                    <div class="section-header">
+                        <h1>Manage Vacancies</h1>
+                        <p>View, edit, and manage all job postings</p>
+                    </div>
+                    
+                    <div class="vacancies-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="vacancySearch" placeholder="Search vacancies...">
+                        </div>
+                        <button id="addVacancyBtn" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            Add New Vacancy
+                        </button>
+                    </div>
+                    
+                    <div class="vacancies-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Company</th>
+                                    <th>Location</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Views</th>
+                                    <th>Posted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vacanciesTableBody">
+                                <!-- Vacancies will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="vacanciesPagination">
+                        <!-- Pagination will be generated here -->
+                    </div>
+                </section>
+
+                <!-- Add Vacancy Section -->
+                <section id="add-vacancy" class="content-section">
+                    <div class="section-header">
+                        <h1>Add New Vacancy</h1>
+                        <p>Create a new job posting</p>
+                    </div>
+                    
+                    <form id="addVacancyForm" class="vacancy-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title">Job Title *</label>
+                                <input type="text" id="title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Company *</label>
+                                <input type="text" id="company" name="company" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="location">Location *</label>
+                                <input type="text" id="location" name="location" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Job Type *</label>
+                                <select id="type" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Contract">Contract</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Remote">Remote</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="experience">Experience Level *</label>
+                                <input type="text" id="experience" name="experience" placeholder="e.g., Entry Level, Mid Level, Senior" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="salary">Salary *</label>
+                                <input type="text" id="salary" name="salary" placeholder="e.g., $50,000 - $70,000" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">Job Description *</label>
+                            <textarea id="description" name="description" rows="6" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="requirements">Requirements *</label>
+                            <div class="requirements-input">
+                                <div id="requirementsList" class="requirements-list">
+                                    <div class="requirement-item">
+                                        <input type="text" class="requirement-input" placeholder="Enter requirement">
+                                        <button type="button" class="remove-requirement">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" id="addRequirement" class="add-requirement-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Add Requirement
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="benefits">Benefits (Optional)</label>
+                            <div class="benefits-input">
+                                <div id="benefitsList" class="benefits-list">
+                                    <div class="benefit-item">
+                                        <input type="text" class="benefit-input" placeholder="Enter benefit">
+                                        <button type="button" class="remove-benefit">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" id="addBenefit" class="add-benefit-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Add Benefit
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="applyLink">Apply Link *</label>
+                                <input type="url" id="applyLink" name="applyLink" placeholder="https://..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date *</label>
+                                <input type="date" id="expiryDate" name="expiryDate" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tags">Tags (Optional)</label>
+                            <input type="text" id="tags" name="tags" placeholder="Enter tags separated by commas">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="cancelBtn" class="cancel-btn">Cancel</button>
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-save"></i>
+                                Create Vacancy
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile" class="content-section">
+                    <div class="section-header">
+                        <h1>Profile Settings</h1>
+                        <p>Manage your account information</p>
+                    </div>
+                    
+                    <div class="profile-content">
+                        <form id="profileForm" class="profile-form">
+                            <div class="form-group">
+                                <label for="profileName">Full Name</label>
+                                <input type="text" id="profileName" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileUsername">Username</label>
+                                <input type="text" id="profileUsername" name="username" readonly>
+                            </div>
+                            
+                            <button type="submit" class="update-profile-btn">
+                                <i class="fas fa-save"></i>
+                                Update Profile
+                            </button>
+                        </form>
+                        
+                        <div class="change-password-section">
+                            <h3>Change Password</h3>
+                            <form id="changePasswordForm" class="password-form">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" id="currentPassword" name="currentPassword" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" id="newPassword" name="newPassword" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm New Password</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                </div>
+                                
+                                <button type="submit" class="change-password-btn">
+                                    <i class="fas fa-key"></i>
+                                    Change Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Vacancy Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Vacancy</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editVacancyForm" class="vacancy-form">
+                    <input type="hidden" id="editVacancyId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editTitle">Job Title *</label>
+                            <input type="text" id="editTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCompany">Company *</label>
+                            <input type="text" id="editCompany" name="company" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editLocation">Location *</label>
+                            <input type="text" id="editLocation" name="location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editType">Job Type *</label>
+                            <select id="editType" name="type" required>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Remote">Remote</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editExperience">Experience Level *</label>
+                            <input type="text" id="editExperience" name="experience" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editSalary">Salary *</label>
+                            <input type="text" id="editSalary" name="salary" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editDescription">Job Description *</label>
+                        <textarea id="editDescription" name="description" rows="6" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editApplyLink">Apply Link *</label>
+                        <input type="url" id="editApplyLink" name="applyLink" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editExpiryDate">Expiry Date *</label>
+                            <input type="date" id="editExpiryDate" name="expiryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editIsActive">Status</label>
+                            <select id="editIsActive" name="isActive">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-save"></i>
+                            Update Vacancy
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this vacancy? This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="button" class="delete-btn" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html> 
