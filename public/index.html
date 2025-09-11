@@ -14,11 +14,9 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-cloud"></i>
-                    <div class="logo-text">
-                        <h1>CloudBlitz</h1>
-                        <p>Find Your Dream Job</p>
-                    </div>
+                    <a href="https://cloudblitz.in" target="_blank" rel="noopener noreferrer">
+                        <img src="logo.png" alt="CloudBlitz Logo" class="logo-image">
+                    </a>
                 </div>
                 <div class="header-actions">
                     <button id="adminToggle" class="admin-toggle" aria-label="Admin login">
@@ -34,25 +32,22 @@
     <main class="main">
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-background"></div>
-            <div class="container">
+            <div class="hero-container">
                 <div class="hero-content">
-                    <h1 class="hero-title">Find Your Dream Job</h1>
-                    <p class="hero-subtitle">Discover exciting opportunities with top companies and take the next step in your career journey</p>
-                    <div class="hero-actions">
-                        <button class="btn btn-primary btn-large" onclick="document.getElementById('jobs-section').scrollIntoView({behavior: 'smooth'})">
+                    <div class="hero-text">
+                        <h1 class="hero-title"><span id="typing-text"></span></h1>
+                        <p class="hero-subtitle">Browse hundreds of opportunities and apply instantly.</p>
+                        <a href="#jobs-section" class="btn btn-primary btn-large hero-btn">
                             <i class="fas fa-search"></i>
-                            Browse Jobs
-                        </button>
-                        <button class="btn btn-outline btn-large" onclick="showAdminLoginFromHero()">
-                            <i class="fas fa-user-shield"></i>
-                            Post a Job
-                        </button>
+                            Browse Vacancies
+                        </a>
+                    </div>
+                    <div class="hero-image">
+                        <img src="hero.png" alt="Career opportunities with CloudBlitz" class="hero-img">
                     </div>
                 </div>
             </div>
         </section>
-
         <div class="container">
             <!-- Admin Login Section -->
             <section id="adminLoginSection" class="admin-section" style="display: none;">
@@ -322,6 +317,9 @@
         <div class="notification-content">
             <i class="notification-icon"></i>
             <span class="notification-message"></span>
+            <button class="notification-close" onclick="hideNotification()" aria-label="Close notification">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 

@@ -29,7 +29,6 @@ const adminName = document.getElementById('adminName');
 const searchInput = document.getElementById('searchInput');
 const locationFilter = document.getElementById('locationFilter');
 const typeFilter = document.getElementById('typeFilter');
-const clearFiltersBtn = document.getElementById('clearFilters');
 const jobsGrid = document.getElementById('jobsGrid');
 const loadingState = document.getElementById('loadingState');
 const emptyState = document.getElementById('emptyState');
@@ -46,48 +45,108 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize the application
 async function initializeApp() {
+    startTypingAnimation();
     await loadJobs();
     populateLocationFilter();
     checkAdminAuth();
-}
 
 // Setup event listeners
 function setupEventListeners() {
-    // Admin toggle
-    adminToggle.addEventListener('click', toggleAdminSection);
+    // Admin toggle button
+    if (adminToggle) {
+        adminToggle.addEventListener("click", toggleAdminSection);
+    }
     
     // Login form
-    loginForm.addEventListener('submit', handleLogin);
-    cancelLoginBtn.addEventListener('click', hideAdminSection);
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+    }
     
-    // Admin dashboard
-    postJobBtn.addEventListener('click', showJobForm);
-    exportJobsBtn.addEventListener('click', exportJobs);
-    logoutBtn.addEventListener('click', logout);
+    // Cancel login button
+    if (cancelLoginBtn) {
+        cancelLoginBtn.addEventListener("click", hideAdminSection);
+    }
     
-    // Job form
-    jobForm.addEventListener('submit', handleJobSubmission);
-    cancelBtn.addEventListener('click', hideJobForm);
+    // Job form cancel button
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", hideJobForm);
+    }
     
-    // Search and filters
-    searchInput.addEventListener('input', debounce(handleSearch, 500));
-    locationFilter.addEventListener('change', handleFilterChange);
-    typeFilter.addEventListener('change', handleFilterChange);
-    clearFiltersBtn.addEventListener('click', clearFilters);
+    // Post job button
+    if (postJobBtn) {
+        postJobBtn.addEventListener("click", showJobForm);
+    }
     
-    // Modal
-    document.querySelector('.modal-close').addEventListener('click', closeModal);
-    window.addEventListener('click', function(e) {
-        if (e.target === jobModal) {
-            closeModal();
-        }
-    });
+    // Export jobs button
+    if (exportJobsBtn) {
+        exportJobsBtn.addEventListener("click", exportJobs);
+    }
     
-    // Character count for textareas
-    document.getElementById('shortDescription').addEventListener('input', updateCharCount);
-    document.getElementById('fullDescription').addEventListener('input', updateCharCount);
-}
+    // Logout button
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", logout);
+    }
+    
+    // Search input
+    if (searchInput) {
+        searchInput.addEventListener("input", debounce(handleSearch, 300));
+    }
+    
+    // Location filter
+    if (locationFilter) {
+        locationFilter.addEventListener("change", handleFilterChange);
+    }
+    
+    // Job type filter
+    const jobTypeFilter = document.getElementById("jobTypeFilter");
+    if (jobTypeFilter) {
+        jobTypeFilter.addEventListener("change", handleFilterChange);
+    }
+    
+    // Notification close button
+    const notificationCloseBtn = document.querySelector(".notification-close");
+    if (notificationCloseBtn) {
+        notificationCloseBtn.addEventListener("click", hideNotification);
+        notificationCloseBtn.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                hideNotification();
+            }
+        });
+    }
+}}
 
+// Typing Animation Function - Continuous Loop
+function startTypingAnimation() {
+    const typingText = document.getElementById("typing-text");
+    const text = "Find Your Dream Job with CloudBlitz";
+    let index = 0;
+    let isTyping = true;
+    
+    function typeChar() {
+        if (isTyping) {
+            // Typing phase
+            if (index < text.length) {
+                typingText.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeChar, text.charAt(index) === " " ? 200 : 100);
+            } else {
+                // Pause before erasing
+                isTyping = false;
+                setTimeout(typeChar, 3000);
+            }
+        } else {
+            // Erasing phase - erase all at once
+            typingText.textContent = "";
+            index = 0;
+            isTyping = true;
+            setTimeout(typeChar, 1000); // Pause before retyping
+        }
+    }
+    
+    // Start typing animation after a short delay
+    setTimeout(typeChar, 1000);
+}
 // Setup form validation
 function setupFormValidation() {
     const inputs = jobForm.querySelectorAll('input, select, textarea');
@@ -148,17 +207,6 @@ function toggleAdminSection() {
     }
 }
 
-// Show admin login from hero button
-function showAdminLoginFromHero() {
-    adminLoginSection.style.display = 'block';
-    adminDashboardSection.style.display = 'none';
-    adminJobFormSection.style.display = 'none';
-    
-    // Add a small delay to ensure the element is visible before scrolling
-    setTimeout(() => {
-        adminLoginSection.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-}
 
 // Show admin login
 function showAdminLogin() {
@@ -720,23 +768,36 @@ function updateCharCount() {
 }
 
 // Show notification
-function showNotification(message, type = 'info') {
-    const notificationElement = document.getElementById('notification');
-    const messageElement = notificationElement.querySelector('.notification-message');
+function showNotification(message, type = "info") {
+    const notificationElement = document.getElementById("notification");
+    const messageElement = notificationElement.querySelector(".notification-message");
     
     // Set message and type
     messageElement.textContent = message;
     notificationElement.className = `notification ${type}`;
     
+    // Ensure notification is visible
+    notificationElement.style.display = "block";
+    
     // Show notification
-    notificationElement.classList.add('show');
+    notificationElement.classList.add("show");
     
     // Auto hide after 5 seconds
     setTimeout(() => {
-        notificationElement.classList.remove('show');
+        hideNotification();
     }, 5000);
 }
-
+// Hide notification
+function hideNotification() {
+    const notificationElement = document.getElementById("notification");
+    if (notificationElement) {
+        notificationElement.classList.remove("show");
+        // Ensure complete hiding after transition
+        setTimeout(() => {
+            notificationElement.style.display = "none";
+        }, 300);
+    }
+}
 // Escape HTML to prevent XSS
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -757,5 +818,6 @@ function debounce(func, wait) {
     };
 }
 
-// Global function for modal close (accessible from HTML)
-window.closeModal = closeModal; 
+// Global functions (accessible from HTML)
+window.closeModal = closeModal;
+window.hideNotification = hideNotification; 
